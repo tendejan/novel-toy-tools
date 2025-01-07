@@ -1,0 +1,13 @@
+create a 3d helpers module that has:
+    angular distance between two eulers
+    generating SO(3)
+
+questions for linda or else:
+    when generating the null dataset should I match number of views to the number of samples in our experimental data for more normalized comparison?
+    or should I just divide by number of views for a norm on each component?
+
+    is using the fibbonaci spiral method with quaternions the best method for generating these views? does it account for each planar view?
+    
+    how should rendering be done? do edges matter that are on the interior of the object? should we use the matlab builtin or go with a more complex convolutional method?
+
+    generate a "table" distrobution that takes gravity into account to compare the experimental and null distrobution to

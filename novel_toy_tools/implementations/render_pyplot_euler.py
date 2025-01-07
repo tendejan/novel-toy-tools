@@ -1,13 +1,17 @@
-# from ..core.view_renderer import ViewRenderer
 import numpy as np
 import quaternion
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.colors import LightSource
 import trimesh
 from scipy.spatial.transform import Rotation
+from novel_toy_tools.core.view_renderer import ViewRenderer
 
-class PyPlotViewRenderer:
+# TODO mark part of this code as gpt generated
+#TODO also get rid of this it is pitifully slow
+
+class PyPlotViewRenderer(ViewRenderer):
     def render_all_views(self, object_path, euler_angles, output_path):
         self.load_toy_mesh(object_path) #TODO implement the rendering here
         return super().render_views(object_path, euler_angles, output_path)
@@ -30,7 +34,7 @@ class PyPlotViewRenderer:
 
         for face in mesh_copy.faces:
             tri = mesh_copy.vertices[face]
-            ax.add_collection3d(plt.Poly3DCollection([tri], alpha=1.0, facecolor='gray', edgecolor='gray')) #TODO edges may need to be a different color
+            ax.add_collection3d(Poly3DCollection([tri], alpha=1.0, facecolor='gray', edgecolor='gray')) #TODO edges may need to be a different color
         
         scale = mesh_copy.vertices.flatten()
         ax.auto_scale_xyz(scale, scale, scale)
