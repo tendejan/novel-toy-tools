@@ -1,0 +1,7 @@
+# Python
+__pycache__/
+venv/
+.env
+/novel_toy_tools.egg-info
+
+# Matlab
