@@ -5,6 +5,8 @@ import numpy as np
 import quaternion
 from typing import List
 
+# TODO make this into a class and conform to DI
+
 def fibonacci_sphere_points(num_samples:int) -> np.ndarray:
     """Generate points on a the unit sphere using the Fibonacci spiral method.
     

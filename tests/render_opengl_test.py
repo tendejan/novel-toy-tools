@@ -3,6 +3,7 @@ import os
 from novel_toy_tools.implementations.render_opengl_quaternion import OpenGLViewRenderer
 from novel_toy_tools.implementations.generate_SO3_quaternion_fib import generate_uniform_rotations, check_coverage_metrics
 import quaternion
+import unittest
 
 raw_obj_path = r"/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/tests/BlockGiraffe.obj"
 raw_out_path = r"/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/tests/null_test/"
@@ -17,6 +18,7 @@ rotations = generate_uniform_rotations(num_samples=NUM_SAMPLES)
 print(check_coverage_metrics(rotations))
 
 renderer = OpenGLViewRenderer(600, 800)
+
 
 i = 0
 for quat in rotations:
