@@ -1,7 +1,7 @@
 
 import os
 from novel_toy_tools.implementations.render_opengl_quaternion import OpenGLViewRenderer
-from novel_toy_tools.implementations.generate_SO3_quaternion_fib import generate_uniform_rotations, check_coverage_metrics
+from novel_toy_tools.implementations.generate_SO3_scipi import RotationDistributionScipy
 import quaternion
 import unittest
 
@@ -14,8 +14,8 @@ objectpath = os.path.normpath(raw_obj_path)
 
 NUM_SAMPLES = 1000
 
-rotations = generate_uniform_rotations(num_samples=NUM_SAMPLES)
-print(check_coverage_metrics(rotations))
+rotation_generator = RotationDistributionScipy()
+rotations = rotation_generator.generate_so3_samples(NUM_SAMPLES)
 
 renderer = OpenGLViewRenderer(600, 800)
 
