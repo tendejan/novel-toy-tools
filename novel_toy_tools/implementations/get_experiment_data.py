@@ -1,7 +1,6 @@
 from novel_toy_tools.core.data_provider import DataProvider
 from os import PathLike
 import pandas as pd
-import quaternion
 import numpy as np
 from novel_toy_tools.core.novel_toy import NovelToy
 from scipy.spatial.transform import Rotation
@@ -29,9 +28,7 @@ class ExperimentalDataFromConsolidated(DataProvider):
             novel_toy = NovelToy(self.current_value['3d object'])
             euler = (self.current_value[' y'], self.current_value[' z'], -1 * self.current_value[' x'])
             rotation = Rotation.from_euler("yzx", euler, degrees=True)
-            
-
-            return novel_toy, quaternion.from_euler_angles(rotation.as_euler("xyz", False))
+            return novel_toy, rotation #TODO this function needs help
         else: pass
     
     def load_data(self, in_file:PathLike):

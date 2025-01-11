@@ -1,6 +1,5 @@
 from novel_toy_tools.core.data_provider import DataProvider
 from scipy.spatial.transform import Rotation
-import quaternion
 
 #TODO conform to interface
 
@@ -25,6 +24,5 @@ class RandomSampleDataProvider(DataProvider):
     
     def generate_so3_samples(self, n):
         rotations = Rotation.random(n)
-        quaternions = [quaternion.from_float_array(quat) for quat in rotations.as_quat()]
-        return quaternions
+        return rotations
     

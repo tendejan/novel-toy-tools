@@ -4,7 +4,6 @@ from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import numpy as np
-import quaternion
 from PIL import Image
 from scipy.spatial.transform import Rotation
 
@@ -85,19 +84,6 @@ class OpenGLViewRenderer(ViewRenderer):
                 glVertex3fv(vertices[vertex])
         glEnd()
 
-    def quat_to_axis_angle(self, q: quaternion.quaternion):
-        theta = 2 * np.arccos(q.w) * 180 / np.pi
-        sin_theta = np.sqrt(1 - q.w ** 2)
-
-        if sin_theta < 0.001:
-            return theta, 1.0, 0.0, 0.0
-
-        x = q.x / sin_theta
-        y = q.y / sin_theta
-        z = q.z / sin_theta
-
-        return theta, x, y, z
-
     def setup_lighting(self):
         glEnable(GL_LIGHTING)
         glEnable(GL_LIGHT0)
@@ -118,7 +104,18 @@ class OpenGLViewRenderer(ViewRenderer):
         image = image.transpose(Image.FLIP_TOP_BOTTOM)  # Flip the image vertically
         image.save(filename + ".png")
 
-    def render_single_view(self, novel_toy:NovelToy, rotation, output_filename):
+    def scipy_rotation_to_axis_angle(self, rotation:Rotation):
+        rot_vec = rotation.as_rotvec()
+        angle_degrees = np.degrees(np.linalg.norm(rot_vec))
+
+        #normalization step
+        if np.linalg.norm(rot_vec) > 1e-6:
+            axis = rot_vec/ np.linalg.norm(rot_vec)
+        else:
+            axis = np.array([1.0, 0.0, 0.0]) #default to x if no rot
+        return angle_degrees, *axis
+
+    def render_single_view(self, novel_toy:NovelToy, rotation:Rotation, output_filename):
         """Render a single view using the existing GLUT window"""
         # Make our window current
         glutSetWindow(self.window)
@@ -128,7 +125,7 @@ class OpenGLViewRenderer(ViewRenderer):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # Apply rotation
-        theta, x, y, z = self.quat_to_axis_angle(rotation)
+        theta, x, y, z = self.scipy_rotation_to_axis_angle(rotation) #TODO this function need help
         glPushMatrix()
         glRotatef(theta, x, y, z)
         

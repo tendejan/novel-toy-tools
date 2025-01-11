@@ -1,7 +1,6 @@
 from novel_toy_tools.core.novel_toy import NovelToy
 from novel_toy_tools.implementations.render_opengl_quaternion import OpenGLViewRenderer
 from scipy.spatial.transform import Rotation
-import quaternion
 import numpy as np
 import os
 import itertools
@@ -65,8 +64,7 @@ def create_perms(order_from, order_to, vals, pos):
     image_perm = f"img{pos}_from_{squish(order_from)}_to_{squish(order_to)}"
     image_path = os.path.join(OUT_FOLDER, image_perm)
     rotation = Rotation.from_euler(order_from, arrange_euler(order_from), degrees=True)
-    quat = quaternion.from_euler_angles(rotation.as_euler(order_to, False))
-    renderer.render_single_view(hole_block, quat, image_path)
+    renderer.render_single_view(hole_block, rotation, image_path) #TODO this function needs help
 
 def test_axis():
     rotations = [(0,0,0), (90, 0, 0), (0, 90, 0), (0, 0, 90)]
@@ -76,8 +74,7 @@ def test_axis():
         image_perm = f"axis_check_{ax}_"
         image_path = os.path.join(OUT_FOLDER, image_perm)
         abstract_rot = Rotation.from_euler("xyz", rotate, degrees=True)
-        quat = quaternion.from_euler_angles(abstract_rot.as_euler('xyz', False))
-        renderer.render_single_view(hole_block, quat, image_path)
+        renderer.render_single_view(hole_block, abstract_rot, image_path)
 
 os.makedirs(OUT_FOLDER, exist_ok=True)
 pos = 0
