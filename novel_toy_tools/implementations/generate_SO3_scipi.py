@@ -1,14 +1,27 @@
+from novel_toy_tools.core.data_provider import DataProvider
 from scipy.spatial.transform import Rotation
-from novel_toy_tools.core.null_views_generator import NullViewsGenerator
 import quaternion
 
-class RotationDistributionScipy(NullViewsGenerator):
+#TODO conform to interface
+
+class RandomSampleDataProvider(DataProvider):
     def __init__(self):
-        super().__init__()
+        self.dataframe = self.load_data()
 
-
-    def get_angles(self, n):
-        return super().get_angles(n)
+    def __iter__(self):
+        return super().__iter__()
+    
+    def __next__(self):
+        return super().__next__()
+    
+    def link_rendition(self, rendition_path):
+        return super().link_rendition(rendition_path)
+    
+    def get_rendition_name(self):
+        return super().get_rendition_name()
+    
+    def load_data(self):
+        return
     
     def generate_so3_samples(self, n):
         rotations = Rotation.random(n)

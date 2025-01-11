@@ -1,10 +1,12 @@
+from novel_toy_tools.core.view_renderer import ViewRenderer
+from novel_toy_tools.core.novel_toy import NovelToy
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import numpy as np
 import quaternion
 from PIL import Image
-from novel_toy_tools.core.view_renderer import ViewRenderer
+from scipy.spatial.transform import Rotation
 
 class OpenGLViewRenderer(ViewRenderer):
     def __init__(self, height, width):
@@ -37,6 +39,7 @@ class OpenGLViewRenderer(ViewRenderer):
         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, grey_color)
 
     def render_all_views(self, object_path, euler_angles, output_path):
+        """renders all views of a single object"""
         # Load the object once
         self.vertices, self.normals, self.faces = self.load_obj(object_path)
         
@@ -113,13 +116,13 @@ class OpenGLViewRenderer(ViewRenderer):
         data = glReadPixels(0, 0, self.width, self.height, GL_RGB, GL_UNSIGNED_BYTE)
         image = Image.frombytes("RGB", (self.width, self.height), data)
         image = image.transpose(Image.FLIP_TOP_BOTTOM)  # Flip the image vertically
-        image.save(filename)
+        image.save(filename + ".png")
 
-    def render_single_view(self, object_path, rotation, output_filename):
+    def render_single_view(self, novel_toy:NovelToy, rotation, output_filename):
         """Render a single view using the existing GLUT window"""
         # Make our window current
         glutSetWindow(self.window)
-        self.vertices, self.normals, self.faces = self.load_obj(object_path)
+        self.vertices, self.normals, self.faces = novel_toy.get_toy_data()
         
         # Clear the buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -140,6 +143,7 @@ class OpenGLViewRenderer(ViewRenderer):
         
         # Swap buffers to ensure all commands are executed
         glutSwapBuffers()
+        return output_filename
         
     def __del__(self):
         """Cleanup GLUT resources when the object is destroyed"""

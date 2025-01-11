@@ -1,3 +1,4 @@
+from novel_toy_tools.core.view_renderer import ViewRenderer
 import numpy as np
 import quaternion
 import matplotlib.pyplot as plt
@@ -6,7 +7,6 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib.colors import LightSource
 import trimesh
 from scipy.spatial.transform import Rotation
-from novel_toy_tools.core.view_renderer import ViewRenderer
 
 # TODO mark part of this code as gpt generated
 #TODO also get rid of this it is pitifully slow
