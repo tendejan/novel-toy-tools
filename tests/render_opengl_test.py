@@ -1,8 +1,7 @@
 
 import os
-from novel_toy_tools.implementations.render_opengl_quaternion import OpenGLViewRenderer
+from novel_toy_tools.implementations.render_opengl import OpenGLViewRenderer
 from novel_toy_tools.implementations.generate_SO3_scipi import RotationDistributionScipy
-import quaternion
 import unittest
 
 raw_obj_path = r"/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/tests/BlockGiraffe.obj"

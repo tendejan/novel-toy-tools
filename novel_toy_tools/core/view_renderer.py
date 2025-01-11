@@ -8,6 +8,7 @@ class ViewRenderer(ABC):
     def __init__(self): #TODO shader as arg
         super().__init__()
 
+    #TODO this method probably needs to go
     def render_all_views(self, data_provider:DataProvider, output_path:str):
         """render and save views from a DataProvider object to output"""
         for novel_toy, rotation in data_provider:

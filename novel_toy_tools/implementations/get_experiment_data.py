@@ -5,6 +5,8 @@ import numpy as np
 from novel_toy_tools.core.novel_toy import NovelToy
 from scipy.spatial.transform import Rotation
 
+#see https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.from_euler.html
+VIEWER_3D_EULER_ORDER = "YZX" #where capital corisponds to intrinsic rotations
 
 class ExperimentalDataFromConsolidated(DataProvider):
     def __init__(self, in_file, output_directory):
@@ -26,9 +28,10 @@ class ExperimentalDataFromConsolidated(DataProvider):
 
         if self.is_coded():
             novel_toy = NovelToy(self.current_value['3d object'])
-            euler = (self.current_value[' y'], self.current_value[' z'], -1 * self.current_value[' x'])
-            rotation = Rotation.from_euler("yzx", euler, degrees=True)
-            return novel_toy, rotation #TODO this function needs help
+            # the order that euler values are read in will need to change if VIEWER_3D_EULER_ORDER is changed
+            euler = (self.current_value[' y'], self.current_value[' z'], self.current_value[' x'])
+            rotation = Rotation.from_euler(VIEWER_3D_EULER_ORDER, euler, degrees=True)
+            return novel_toy, rotation
         else: pass
     
     def load_data(self, in_file:PathLike):
@@ -53,7 +56,4 @@ class ExperimentalDataFromConsolidated(DataProvider):
         else: return False
     
 if __name__ == "__main__":
-    infile = r"/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/experimental/OldDataSheet.csv"
-    data_provider = ExperimentalDataFromConsolidated(infile, "/tests")
-    for data in data_provider:
-        print(data)
+    pass

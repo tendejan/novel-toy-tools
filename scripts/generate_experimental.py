@@ -1,5 +1,5 @@
 from novel_toy_tools.implementations.get_experiment_data import ExperimentalDataFromConsolidated
-from novel_toy_tools.implementations.render_opengl_quaternion import OpenGLViewRenderer
+from novel_toy_tools.implementations.render_opengl import OpenGLViewRenderer
 import os
 
 EXPERIMENTAL_DATA = "/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/experimental/OldDataSheet.csv"

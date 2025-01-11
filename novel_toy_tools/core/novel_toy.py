@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import os
 import numpy as np
 
-OBJECTS_DIRECTORY = "/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/objects"
+OBJECTS_DIRECTORY = "/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/objects" #TODO get rid of this
 
 class NovelToy(ABC):
     def __init__(self, object_name, objects_directory:os.PathLike=OBJECTS_DIRECTORY):

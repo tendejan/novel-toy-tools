@@ -37,6 +37,7 @@ class OpenGLViewRenderer(ViewRenderer):
         grey_color = [1.0, 1.0, 1.0, 1.0]
         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, grey_color)
 
+    #TODO this method probably needs to go
     def render_all_views(self, object_path, euler_angles, output_path):
         """renders all views of a single object"""
         # Load the object once
@@ -48,33 +49,6 @@ class OpenGLViewRenderer(ViewRenderer):
             self.render_single_view(rotation, output_filename)
             
         return [f"view_{i:03d}.png" for i in range(len(euler_angles))]
-
-    def load_obj(self, filename):
-        vertices = []
-        normals = []
-        faces = []
-
-        with open(filename) as f:
-            for line in f:
-                if line.startswith('v '):
-                    parts = line.split()
-                    vertex = list(map(float, parts[1:4]))
-                    vertices.append(vertex)
-                elif line.startswith('vn '):
-                    parts = line.split()
-                    normal = list(map(float, parts[1:4]))
-                    normals.append(normal)
-                elif line.startswith('f '):
-                    parts = line.split()
-                    face = []
-                    for p in parts[1:]:
-                        vals = p.split('/')
-                        vertex_idx = int(vals[0]) - 1
-                        normal_idx = int(vals[2]) - 1
-                        face.append((vertex_idx, normal_idx))
-                    faces.append(face)
-        
-        return np.array(vertices), np.array(normals), np.array(faces)
 
     def draw_object(self, vertices, normals, faces):
         glBegin(GL_TRIANGLES)
@@ -105,6 +79,7 @@ class OpenGLViewRenderer(ViewRenderer):
         image.save(filename + ".png")
 
     def scipy_rotation_to_axis_angle(self, rotation:Rotation):
+        """convert the scipy rotation object into axis angel format"""
         rot_vec = rotation.as_rotvec()
         angle_degrees = np.degrees(np.linalg.norm(rot_vec))
 
@@ -115,6 +90,9 @@ class OpenGLViewRenderer(ViewRenderer):
             axis = np.array([1.0, 0.0, 0.0]) #default to x if no rot
         return angle_degrees, *axis
 
+    #TODO this is loading the object numerous times and then applying a new rotation
+    #TODO it would likely be faster to only load a new object when presented and to appy rotations by rotating then unrotating
+    #TODO alternatively this could be completely parallelized if I new more about graphics computing pipelines
     def render_single_view(self, novel_toy:NovelToy, rotation:Rotation, output_filename):
         """Render a single view using the existing GLUT window"""
         # Make our window current
@@ -125,7 +103,7 @@ class OpenGLViewRenderer(ViewRenderer):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # Apply rotation
-        theta, x, y, z = self.scipy_rotation_to_axis_angle(rotation) #TODO this function need help
+        theta, x, y, z = self.scipy_rotation_to_axis_angle(rotation)
         glPushMatrix()
         glRotatef(theta, x, y, z)
         
