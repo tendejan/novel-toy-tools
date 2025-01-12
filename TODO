@@ -2,6 +2,10 @@ create a 3d helpers module that has:
     angular distance between two eulers
     generating SO(3)
 
+project structure:
+    maybe change core.rendition_statistics to just rendition
+    perhaps then all rendition generation happens by creating novel toys which have orientations and view renderers and then have renditions
+
 questions for linda or else:
     when generating the null dataset should I match number of views to the number of samples in our experimental data for more normalized comparison?
     or should I just divide by number of views for a norm on each component?
