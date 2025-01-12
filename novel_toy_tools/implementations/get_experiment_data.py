@@ -28,6 +28,7 @@ class ExperimentalDataFromConsolidated(DataProvider):
 
         if self.is_coded():
             novel_toy = NovelToy(self.current_value['3d object'])
+            #NOTE dataframe columns x, y, and z have a space in front of them to keep consistent with previous work
             # the order that euler values are read in will need to change if VIEWER_3D_EULER_ORDER is changed
             euler = (self.current_value[' y'], self.current_value[' z'], self.current_value[' x'])
             rotation = Rotation.from_euler(VIEWER_3D_EULER_ORDER, euler, degrees=True)
@@ -42,6 +43,7 @@ class ExperimentalDataFromConsolidated(DataProvider):
         return
     
     def get_rendition_name(self):
+        #NOTE column raw filename has a space in front to keep consistent with previous work
         frame_name = self.current_value[' raw filename']
         rendition_name = "rendition_" + frame_name
         return rendition_name
@@ -51,6 +53,7 @@ class ExperimentalDataFromConsolidated(DataProvider):
         return object_name
     
     def is_coded(self) -> bool: #TODO check coded value and also check nan in angles
+        #NOTE column code has a space to keep consistent with previous work
         if self.current_value[' code'] == 1:
             return True
         else: return False

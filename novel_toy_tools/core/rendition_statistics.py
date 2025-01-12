@@ -4,7 +4,6 @@ from os import PathLike
 class RenditionStatistics(ABC):
     """an abstract class for the various computations on novel toy renditions"""
     def __init__(self, path_to_image:PathLike):
-        self.load_image(path_to_image)
         return super().__init__()
     
     @abstractmethod

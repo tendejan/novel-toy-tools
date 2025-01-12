@@ -16,6 +16,7 @@ for file in os.listdir(OBJECT_DIR):
         OBJECTS.append(file[:-4])
 
 renderer = OpenGLViewRenderer(600, 800)
+#NOTE the colums x y and z have a space before each letter to keep consistent with previous csv's
 columns = ['object', ' x', ' y', ' z', 'rendition']
 dataframe = pd.DataFrame()
 data = []

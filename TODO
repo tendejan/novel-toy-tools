@@ -14,4 +14,6 @@ questions for linda or else:
 
     generate a "table" distrobution that takes gravity into account to compare the experimental and null distrobution to
 
-    need to make openglrenderer conform to the renderer interface, the renderer interface should also takea shader object at initialization
+    when computing hull should I compute euler number? should I check number of convex hulls?
+        when computing longest edge is my method ok?
+        when computing area presented is my method ok? should I take area as a proportion of total screen space?
