@@ -7,5 +7,6 @@ data/
 TODO
 .DS_Store
 /tests/reverse_engineer
+notebooks/
 
 .DS_Store

@@ -21,6 +21,10 @@ class RenditionStatistics(ABC):
     @abstractmethod
     def compute_planar_view(self):
         raise NotImplementedError
+    
+    @abstractmethod
+    def compute_symmetry(self):
+        raise NotImplementedError
 
     @abstractmethod
     def get_rendition_statistics(self) -> dict:
