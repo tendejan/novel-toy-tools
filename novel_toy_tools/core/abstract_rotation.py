@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 
-class Renderer(ABC):
+class AbstractRotation(ABC):
     def __init__(self):
         super().__init__()
 
-    def render_view():
+    #TODO use the viewer3d const here
+    def from_euler():
         pass

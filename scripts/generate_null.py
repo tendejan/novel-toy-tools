@@ -1,7 +1,7 @@
 import os
-from novel_toy_tools.implementations.render_opengl import OpenGLViewRenderer
-from novel_toy_tools.implementations.generate_SO3_scipi import RandomSampleDataProvider
-from novel_toy_tools.core.novel_toy import NovelToy
+from novel_toy_tools._depricated.implementations.render_opengl import OpenGLViewRenderer
+from novel_toy_tools._depricated.implementations.generate_SO3_scipi import RandomSampleDataProvider
+from novel_toy_tools._depricated.interfaces.novel_toy import NovelToy
 import pandas as pd
 from scipy.spatial.transform import Rotation
 

@@ -1,5 +1,5 @@
-from novel_toy_tools.refactored_core.frame_data_provider import FrameDataProvider
-from novel_toy_tools.refactored_core.renderer import Renderer
+from novel_toy_tools.core.frame_data_provider import FrameDataProvider
+from novel_toy_tools.core.renderer import Renderer
 from scipy.spatial.transform import Rotation
 
 #TODO this class may want to also generate the rendion statistics

@@ -60,6 +60,10 @@ class TestPlanarity:
         for axes in colinear_axes:
             assert has_colinear_planarity(axes) == True
 
+    #TODO this
+    def test_threshold(self):
+        pass
+
 
 
 def generate_right_rotations():

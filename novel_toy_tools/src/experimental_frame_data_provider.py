@@ -1,4 +1,4 @@
-from novel_toy_tools.refactored_core.frame_data_provider import FrameDataProvider
+from novel_toy_tools.core.abstract_frame_data_provider import FrameDataProvider
 #TODO derivitive NovelToy should be in this class
 #TODO write a better docstring
 

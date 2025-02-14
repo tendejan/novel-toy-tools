@@ -7,7 +7,6 @@ class RenditionStatisticsCv2(RenditionStatistics):
     def __init__(self, path_to_image):
         self.path_to_image = path_to_image
         self.AVOID_HOLES = False #primarily a constant for setting the behavior of Longest Edge
-        self.image = self.load_image(path_to_image)
         self.image_binarized = self.binarize_image()
         self.image_contours, self.image_contour_hierarchy = self.get_hull()
         super().__init__(path_to_image)

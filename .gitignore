@@ -8,5 +8,4 @@ TODO
 .DS_Store
 /tests/reverse_engineer
 notebooks/
-
-.DS_Store
+novel_toy_tools/src/secrets.py
