@@ -10,16 +10,17 @@ from PIL import Image
 class SlowRendition(AbstractRendition):
     """Initial class for rendition and computing rendition statistics"""
     def __init__(self, rendition_image:Image):
-        self.renditon = np.asarray(rendition_image)
+        self.image = rendition_image
         self.AVOID_HOLES = False #primarily a constant for setting the behavior of Longest Edge
         #TODO may want to lazy load these derived properties
         self.image_binarized = self.binarize_image()
         self.image_contours, self.image_contour_hierarchy = self.get_hull()
-        super().__init__()
+        super().__init__(rendition_image)
 
 
     def binarize_image(self):
-        self.renditon_greyscale = cv2.cvtColor(self.renditon, cv2.COLOR_RGB2GRAY)
+        numpy_rendition = np.asarray(self.image)
+        self.renditon_greyscale = cv2.cvtColor(numpy_rendition, cv2.COLOR_RGB2GRAY)
         #TODO investigate this cv2
         #TODO do we really need this to save to self?
         _, image_binaraized = cv2.threshold(self.renditon_greyscale, 50, 255, cv2.THRESH_BINARY)

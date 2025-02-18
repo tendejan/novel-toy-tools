@@ -1,5 +1,5 @@
-from novel_toy_tools.interfaces.abstract_renderer import AbstractRenderer
-from novel_toy_tools.src.slow_rendition import SlowRendition
+from novel_toy_tools.core.abstract_renderer import AbstractRenderer
+from novel_toy_tools.src.rendition_viewer3d import RenditionViewer3d
 #TODO may want to use the abstract class here
 from novel_toy_tools.src.wavefront_novel_toy import WavefrontNovelToy
 
@@ -100,7 +100,7 @@ class OpenGlRenderer(AbstractRenderer):
         # Swap buffers to ensure all commands are executed
         glutSwapBuffers()
 
-    def generate_rendition(self, novel_toy:WavefrontNovelToy, rotation:Rotation) -> SlowRendition:
+    def generate_rendition(self, novel_toy:WavefrontNovelToy, rotation:Rotation) -> RenditionViewer3d:
         #TODO think about the implementation here
         self.render_single_view(novel_toy, rotation)
         glPixelStorei(GL_PACK_ALIGNMENT, 1)
@@ -108,7 +108,7 @@ class OpenGlRenderer(AbstractRenderer):
         image = Image.frombytes("RGB", (self.width, self.height), data)
         image = image.transpose(Image.FLIP_TOP_BOTTOM)  # Flip the image vertically
 
-        return SlowRendition(rendition_image=image)
+        return RenditionViewer3d(image)
         
 
     def __del__(self):

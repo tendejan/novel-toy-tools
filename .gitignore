@@ -9,3 +9,4 @@ TODO
 /tests/reverse_engineer
 notebooks/
 novel_toy_tools/src/secrets.py
+my_secrets.py

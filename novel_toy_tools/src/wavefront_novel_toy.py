@@ -1,15 +1,15 @@
-from novel_toy_tools.interfaces.abstract_novel_toy import AbstractNovelToy
+from novel_toy_tools.core.abstract_novel_toy import AbstractNovelToy
 import os
 import numpy as np
 
 #TODO remove the secret, constant
-import my_secrets
 from novel_toy_tools.constants import NOVEL_TOY_EXTENSION
 
 class WavefrontNovelToy(AbstractNovelToy):
-    def __init__(self, toy_name:str, toy_directory:os.PathLike=my_secrets.OBJECTS_DIRECTORY):
+    def __init__(self, toy_name:str, toy_directory:os.PathLike):
         super().__init__()
         self.toy_file_path = self.find_toy_file(toy_name, toy_directory)
+        self.name = toy_name
         #TODO write error for missing major axes here
         self.load_object(self.toy_file_path)
 

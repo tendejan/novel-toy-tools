@@ -1,10 +1,10 @@
 from abc import abstractmethod, ABC
 from novel_toy_tools.core.abstract_data_manager import AbstractDataManager
-from novel_toy_tools.core.abstract_renderer import AbstractRenderer
+from typing import List
 
 
-class AbstractAnalysisPipeline(ABC):
-    def __init__(self):
+class AbstractDataPipeline(ABC):
+    def __init__(self, data_managers:List[AbstractDataManager]):
         super().__init__()
 
 

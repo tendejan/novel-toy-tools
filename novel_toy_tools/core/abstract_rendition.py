@@ -1,9 +1,14 @@
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
+#TODO dept: think about removing this dept
+from PIL import Image
+
+#TODO rethink if we need this class
+@dataclass
 class AbstractRendition(ABC):
-    def __init__(self):
-        super().__init__()
+    image:Image = None
 
-    @abstractmethod
-    def get_rendition_statistics(self):
-        pass
+    #TODO probs only need this for debug
+    def show(self):
+        self.image.show()

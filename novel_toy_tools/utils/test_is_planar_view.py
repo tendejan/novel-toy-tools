@@ -1,11 +1,11 @@
-from is_planar_view import *
+from novel_toy_tools.utils.orientation import *
 import pytest
 from itertools import permutations, product
 import numpy as np
 
-from novel_toy_tools.implementations import render_opengl
-from novel_toy_tools.implementations import get_experiment_data
-from novel_toy_tools.implementations import generate_SO3_scipi
+from novel_toy_tools.src import render_opengl
+from novel_toy_tools.src import get_experiment_data
+from novel_toy_tools.src import generate_SO3_scipi
 
 #ok so we're gonna want to generate a test example where we read from 3dViewer data, compute their planarity and then visually check
 

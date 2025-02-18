@@ -1,14 +1,14 @@
-from novel_toy_tools.interfaces.abstract_data_manager import AbstractDataManager
-from novel_toy_tools.interfaces.abstract_data_provider import AbstractDataProvider
-from novel_toy_tools.interfaces.abstract_data_writer import AbstractDataWriter
-from novel_toy_tools.interfaces.abstract_renderer import AbstractRenderer
+from novel_toy_tools.core.abstract_data_manager import AbstractDataManager
+from novel_toy_tools.core.abstract_data_provider import AbstractDataProvider
+from novel_toy_tools.core.abstract_data_writer import AbstractDataWriter
+from novel_toy_tools.core.abstract_renderer import AbstractRenderer
 
 from novel_toy_tools.src.null_distribution_data_provider import NullDistributionDataProvider
 from novel_toy_tools.src.null_data_writer import NullDataWriter
 from opengl_renderer import OpenGlRenderer
 import multiprocessing
 
-from my_secrets import *
+from novel_toy_tools.my_secrets import *
 from novel_toy_tools.constants import *
 
 #TODO this may be an uneeded file

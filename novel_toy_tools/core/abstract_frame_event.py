@@ -1,13 +1,17 @@
 from abc import ABC, abstractmethod
-
-#TODO may not need the renderer dep
-from novel_toy_tools.core.abstract_renderer import AbstractRenderer
+from dataclasses import dataclass
+from novel_toy_tools.core.abstract_rotation import AbstractRotation
+from novel_toy_tools.core.abstract_novel_toy import AbstractNovelToy
+from novel_toy_tools.core.abstract_rendition import AbstractRendition
 
 #TODO add rendition rotation and other abstract properties here
+@dataclass
 class AbstractFrameEvent(ABC):
-    def __init__(self):
-        super().__init__()
+    statistics:dict = None
+    novel_toy:AbstractNovelToy = None
+    rotation:AbstractRotation = None
+    rendition:AbstractRendition = None
 
-    @abstractmethod
-    def get_statistics(self, renderer:AbstractRenderer):
-        pass
+    #TODO this may want to be an abstract method
+    def inject_computed_statistics(self, stats_dict:dict):
+        self.statistics.update(stats_dict)
