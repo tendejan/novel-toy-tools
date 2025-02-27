@@ -8,7 +8,7 @@ PI = np.pi
 #Viewer 3d constants
 VIEWER3D_EULER_ORDER = 'YZX'
 VIEWER3D_PERSPECTIVE_VECTOR = np.asarray([0, 1, 0])
-VIEWER3D_RENDITION_DIMENTIONS = (600, 800)
+VIEWER3D_RENDITION_DIMENTIONS = (800, 600)
 #TODO add version here for version of the app
 VIEWER3D_OUTPUT_COLUMNS = [
     '3d object',
@@ -25,9 +25,9 @@ VIEWER3D_OUTPUT_COLUMNS = [
 ]
 
 VIEWER3D_CODES = {
-    0: "Object not in view",
-    1: "Frame coded",
-    -1: "Error"
+    -1: "Object absent",
+    1: "Object in view",
+    -2: "Not codable"
 }
 
 #Novel Toy object constants

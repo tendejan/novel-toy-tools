@@ -10,6 +10,9 @@ from novel_toy_tools.src.wavefront_novel_toy import WavefrontNovelToy
 class FrameEventViewer3d(AbstractFrameEvent):
     #TODO this should take as many args as possible and then default to None for any others,
     #then it can dynamically generate the NONES
+    def __init__(self, row):
+        super().__init__()
+        self.statistics = dict(row)
 
     def inject_computed_statistics(self, stats_dict:dict):
         return super().inject_computed_statistics(stats_dict)

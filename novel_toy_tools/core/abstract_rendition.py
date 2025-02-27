@@ -12,3 +12,7 @@ class AbstractRendition(ABC):
     #TODO probs only need this for debug
     def show(self):
         self.image.show()
+
+    @abstractmethod
+    def save(self):
+        pass

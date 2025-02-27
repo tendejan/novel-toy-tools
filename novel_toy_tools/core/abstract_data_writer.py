@@ -8,9 +8,9 @@ class AbstractDataWriter(ABC):
         super().__init__()
 
     @abstractmethod
-    def write(self, frame_events:List[AbstractFrameEvent]):
+    def write(self, frame_events:AbstractFrameEvent):
         pass
 
     @abstractmethod
-    def update(self, frame_events:List[AbstractFrameEvent]):
+    def update(self, frame_events:AbstractFrameEvent):
         pass

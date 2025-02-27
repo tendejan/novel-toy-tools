@@ -54,13 +54,13 @@ class WavefrontNovelToy(AbstractNovelToy):
                 elif line.startswith('axis '):
                     parts = line.split()
                     if parts[1] == "elongation_main":
-                        axis_of_elongation_main = np.array(list(map(int, parts[2:])))
+                        self.axis_of_elongation_main = np.array(list(map(int, parts[2:])))
                     elif parts[1] == "elongation_secondary":
-                        axis_of_elongation_secondary = np.array(list(map(int, parts[2:])))
+                        self.axis_of_elongation_secondary = np.array(list(map(int, parts[2:])))
                     elif parts[1] == "top":
-                        axis_of_top = np.array(list(map(int, parts[2:])))
+                        self.axis_of_top = np.array(list(map(int, parts[2:])))
                     elif parts[1] == "forward":
-                        axis_of_forward = np.array(list(map(int, parts[2:])))
+                        self.axis_of_forward = np.array(list(map(int, parts[2:])))
                         #TODO maybe raise axis not found error here?
 
         self.vertices = np.array(vertices) 
