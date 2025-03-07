@@ -23,7 +23,7 @@ matplotlib==3.9.4
 matplotlib-inline==0.1.7
 narwhals==1.29.0
 nest-asyncio==1.6.0
--e git+ssh://git@github.com/tendejan/novel-toy-tools.git@98fec90072e8c93e1d7f0477dea6c173373b85dd#egg=novel_toy_tools
+-e git+ssh://git@github.com/tendejan/novel-toy-tools.git@d73a51876a4dde2883da4907f0d54e5097d5b8d0#egg=novel_toy_tools
 numpy==1.26.4
 opencv-python==4.10.0.84
 packaging==24.2
@@ -47,6 +47,7 @@ pytz==2024.2
 pyzmq==26.2.0
 scikit-learn==1.6.1
 scipy==1.13.1
+seaborn==0.13.2
 six==1.17.0
 stack-data==0.6.3
 threadpoolctl==3.5.0
