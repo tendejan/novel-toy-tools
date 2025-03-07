@@ -1,16 +1,19 @@
 from novel_toy_tools.core.abstract_data_manager import AbstractDataManager
-from novel_toy_tools.src.experimental_data_provider import ExperimentalDataProviderFromConsolidated
-from novel_toy_tools.src.experimental_data_writer import ExperimentalDataWriter
+from novel_toy_tools.src.csv_data_writer import ExperimentalDataWriter
 from novel_toy_tools.src.opengl_renderer import ObjectRenderer
 from novel_toy_tools.src.wavefront_novel_toy import WavefrontNovelToy
-from novel_toy_tools.src.frame_event_viewer3d import FrameEventViewer3d
+from novel_toy_tools.src.frame_event_viewer3d import FrameEventViewer3d #TODO im pretty sure I should just get rid of this and use the abstract clas
+
+from novel_toy_tools.src.experimental_data_provider import ExperimentalDataProviderFromConsolidated
+from novel_toy_tools.src.null_distribution_data_provider import NullDistributionDataProvider
+
+#TODO refactor these for DI
+from novel_toy_tools.src.image_analysis import ImageProcessor
+
 from scipy.spatial.transform import Rotation
-import os
 from novel_toy_tools.my_secrets import *
 from novel_toy_tools.constants import *
 from novel_toy_tools.utils import arrange_eulers
-
-#debug
 
 
 from tqdm import tqdm
@@ -36,6 +39,9 @@ class ConcreteDataManager(AbstractDataManager):
             #get rendition
             frame_event.rendition = renderer.generate_rendition(frame_event.novel_toy, frame_event.rotation)
 
+            #ok now compute the rendition props and inject them into the frame event
+            image_processor = ImageProcessor(frame_event.rendition)
+            frame_event.inject_computed_statistics(image_processor.get_image_statistics())
 
             self.frame_events.append(frame_event)
             
@@ -56,14 +62,14 @@ class ConcreteDataManager(AbstractDataManager):
 
 if __name__ == "__main__":
     #init depts
-    data_provider = ExperimentalDataProviderFromConsolidated(EXPERIMENTAL_CSV_FROM_CONSOLIDATED)
-
-    data_writer = ExperimentalDataWriter(EXPERIMENTAL_OUT_RENDITIONS, EXPERIMENTAL_OUT_STATISTICS)
-    analysis_package = None
+    # data_provider = ExperimentalDataProviderFromConsolidated(EXPERIMENTAL_CSV_FROM_CONSOLIDATED)
+    data_provider = NullDistributionDataProvider(NULL_TOY_FRAME_COUNTS)
+    data_writer = ExperimentalDataWriter(r"/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/null_distributions/renditions", r"/Users/tendejan/Desktop/Tom Endejan Novel Toy 2024/data/null_distributions/null_statistics.csv")
+    # analysis_package = FrameAnalysis() #TODO refactor and then inject this
     renderer = ObjectRenderer(*VIEWER3D_RENDITION_DIMENTIONS)
 
-    #inject
-    data_manager = ConcreteDataManager(data_provider, data_writer, analysis_package, renderer)
+    #inject #TODO fix the analysis package injection
+    data_manager = ConcreteDataManager(data_provider, data_writer, None, renderer)
 
     #proceed
     data_manager.process_data()

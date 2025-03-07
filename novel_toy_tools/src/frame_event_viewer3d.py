@@ -6,7 +6,7 @@ from scipy.spatial.transform import Rotation
 
 from novel_toy_tools.src.wavefront_novel_toy import WavefrontNovelToy
 
-
+#TODO im pretty sure I should just get rid of this and use the abstract class
 class FrameEventViewer3d(AbstractFrameEvent):
     #TODO this should take as many args as possible and then default to None for any others,
     #then it can dynamically generate the NONES

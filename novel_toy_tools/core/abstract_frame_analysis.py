@@ -8,13 +8,8 @@ class AbstractFrameAnalysis(ABC):
         super().__init__()
 
     @abstractmethod
-    def analyse_rendition(self):
-        pass
-
-    @abstractmethod
     def analyse_statistics(self):
         pass
 
-    @abstractmethod
     def get_computed_props(self):
-        pass
+        return self.computed_properties

@@ -18,7 +18,6 @@ class ExperimentalDataProviderFromConsolidated(AbstractDataProvider):
         return self.data_frame_iterator.__next__()
         
 
-
     def get_toys(self) -> List[str]: #TODO consider passing column names as a schema
         return self.data_frame.unique(subset=['3d object']).get_column('3d object').to_numpy().tolist()
         

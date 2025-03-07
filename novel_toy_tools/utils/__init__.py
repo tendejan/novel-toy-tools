@@ -1,2 +1,1 @@
 from novel_toy_tools.utils.arrange_eulers import arrange_eulers
-from novel_toy_tools.utils.orientation import is_planar_view

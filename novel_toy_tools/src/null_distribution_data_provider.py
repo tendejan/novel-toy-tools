@@ -9,38 +9,58 @@ class NullDistributionDataProvider(AbstractDataProvider):
     """A DataManager class for generating FrameEvents randomly"""
     def __init__(self, toy_frame_counts:dict):
         self.toy_frame_counts = toy_frame_counts
-        self.toys = toy_frame_counts.keys()
-        self.current_toy_index = 0
-        self.repitition = 0
+        self.toys = list(toy_frame_counts.keys())
+        self.frames:list = None
 
     def __iter__(self):
+        self.frames = []
+        for toy in self.toy_frame_counts:
+            for _ in range(self.toy_frame_counts[toy]): #TODO I know this is wasteful but its also simple
+                self.frames.append(toy)
+        self.i = 0
+        self.height = len(self.frames)
         return self
     
     def __next__(self):
-        if self.current_toy_index >= len(self.toys):
+        if self.i >= self.height:
             raise StopIteration
-        
-        #TODO this is so messy, clean it up seriously
-        if self.repitition < self.toy_frame_counts[self.toys[self.current_toy_index]]:
-            #TODO change this perhaps
-            eulers = Rotation.random().as_euler(VIEWER3D_EULER_ORDER, degrees=True)
-            frame_event = FrameEventViewer3d()
-
-            frame_event.novel_toy_name = self.toys[self.current_toy_index]
-            frame_event.frame_number = self.repitition
-            frame_event.experiment_id = "NULL"
-            frame_event.age = "NULL"
-            frame_event.camera_type = "virtual"
-            frame_event.code = 1
-            frame_event.euler_x = eulers[0]
-            frame_event.euler_y = eulers[1]
-            frame_event.euler_z = eulers[2]
-            frame_event.onset = -1
-            frame_event.offset =-1
-            
-            self.repitition += 1
-            return frame_event
         else:
-            self.repitition = 0
-            self.current_toy_index += 1
-            return 
+        
+            eulers = Rotation.random().as_euler(VIEWER3D_EULER_ORDER, degrees=True)
+
+            novel_toy_name = self.frames[self.i]
+            frame_number = self.i
+            experiment_id = "NULL"
+            age = "NULL"
+            camera_type = "virtual"
+            code = 1
+            euler_x = eulers[0]
+            euler_y = eulers[1]
+            euler_z = eulers[2]
+            onset = -1
+            offset =-1
+            row = {
+                "3d object": novel_toy_name,
+                " subject id": 00000,
+                " frame number": frame_number,
+                " exp ID": experiment_id,
+                " age": age,
+                " camera type": camera_type,
+                " code": 1,
+                " x": euler_x,
+                " y": euler_y,
+                " z": euler_z,
+                " onset":-1,
+                " offset":-1,
+                " raw filename": f"{novel_toy_name}_x{round(euler_x, 2)}_y{round(euler_y, 2)}_z{round(euler_z, 2)}"
+                
+            }
+            
+            self.i += 1
+            return row
+
+    def get_toys(self):
+        return self.toy_frame_counts.keys()
+    
+    def height(self):
+        return sum(self.toy_frame_counts.values())
