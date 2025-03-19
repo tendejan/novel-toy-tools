@@ -10,3 +10,4 @@ notebooks/
 .vscode
 novel_toy_tools/my_secrets.py
 **/.DS_Store
+*.DS_Store
