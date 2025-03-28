@@ -16,14 +16,14 @@ INPUT_CSV = os.path.normpath(r"")
 OUTPUT_DIRECTORY = os.path.normpath(r"")
 
 #change this order to whatever order your program uses
-EULER_ORDER = "XYZ"
+EULER_ORDER = "YZX"
 
 #CSV header definitions, change these if needbe
-PRIMARY_KEY = "file_name"
-EULER_X = "euler_x"
-EULER_Y = "euler_y"
-EULER_Z = "euler_z"
-OBJECT_NAME = 'object_name'
+PRIMARY_KEY = "KID_IDFrameKey"
+EULER_X = "EulerAngleX"
+EULER_Y = "EulerAngleY"
+EULER_Z = "EulerAngleZ"
+OBJECT_NAME = 'Object'
 
 #we probably only want the one renderer, pass in dimensions to the renderer object if you want something other than 800x600
 RENDERER = ObjectRenderer()
@@ -48,7 +48,7 @@ def generate_rendition(object_cache:dict, output_dir:os.PathLike, dataframe_row:
 
 def main(input_csv:os.PathLike, output_directory:os.PathLike, object_directory:os.PathLike):
     #read the csv
-    dataframe = pl.read_csv(input_csv)
+    dataframe = pl.read_csv(input_csv, ignore_errors=True)
     #filter out all rows that do not contain orientations
     dataframe = dataframe.filter(
         pl.col(EULER_X).is_not_null(),
@@ -66,11 +66,12 @@ def main(input_csv:os.PathLike, output_directory:os.PathLike, object_directory:o
 
     partial_funct = partial(generate_rendition, toy_cache, output_directory)
     #generate the rotations in parallel
+    print(f"Saving renditions to {output_directory}")
     with Pool(NUM_CORES) as pool:
         results = list(tqdm(
             pool.imap_unordered(partial_funct, dataframe.iter_rows(named=True)),
             total=dataframe.height,
-            desc=f"Generating and saving renditions to {output_directory}"
+            desc="Generating Renditions"
         ))
 
 if __name__ == "__main__":
