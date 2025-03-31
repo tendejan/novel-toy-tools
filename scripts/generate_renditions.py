@@ -26,7 +26,7 @@ EULER_Z = "EulerAngleZ"
 OBJECT_NAME = 'Object'
 
 #we probably only want the one renderer, pass in dimensions to the renderer object if you want something other than 800x600
-RENDERER = ObjectRenderer()
+RENDERER = ObjectRenderer(camera_distance=-35)
 
 def generate_rendition(object_cache:dict, output_dir:os.PathLike, dataframe_row:pl.Series, renderer:ObjectRenderer=RENDERER):
     primary_key = dataframe_row[PRIMARY_KEY]

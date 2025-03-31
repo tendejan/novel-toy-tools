@@ -15,7 +15,7 @@ from scipy.spatial.transform import Rotation
 # This code is provided as-is without any warranty or guarantee of functionality.
 
 class ObjectRenderer:
-    def __init__(self, width=800, height=600):
+    def __init__(self, width=800, height=600, camera_distance=-400):
         """
         Initialize the renderer with specified dimensions
         
@@ -27,6 +27,7 @@ class ObjectRenderer:
         self.height = height
         self.window = None
         self.initialized = False
+        self.camera_distance = camera_distance
         
         # Store model data
         self.vertices = None
@@ -60,7 +61,7 @@ class ObjectRenderer:
         # Setup modelview
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        glTranslatef(0.0, 0.0, -400)  # Move camera back
+        glTranslatef(0.0, 0.0, self.camera_distance)  # Move camera back
         
         # Setup lighting
         self._setup_lighting()
@@ -148,7 +149,7 @@ class ObjectRenderer:
         # Reset modelview matrix
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        glTranslatef(0.0, 0.0, -400)  # Move camera back
+        glTranslatef(0.0, 0.0, self.camera_distance)  # Move camera back
         
         # Apply rotation if provided
         if rotation is not None:
