@@ -20,9 +20,9 @@ EULER_ORDER = "YZX"
 
 #CSV header definitions, change these if needbe
 PRIMARY_KEY = "KID_IDFrameKey"
-EULER_X = "EulerAngleX"
-EULER_Y = "EulerAngleY"
-EULER_Z = "EulerAngleZ"
+EULER_X = "Euler_X"
+EULER_Y = "Euler_Y"
+EULER_Z = "Euler_Z"
 OBJECT_NAME = 'Object'
 
 #we probably only want the one renderer, pass in dimensions to the renderer object if you want something other than 800x600
