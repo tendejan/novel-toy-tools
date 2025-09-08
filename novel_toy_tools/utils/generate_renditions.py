@@ -26,9 +26,17 @@ EULER_Z = "Euler_Z"
 OBJECT_NAME = 'Object'
 
 #we probably only want the one renderer, pass in dimensions to the renderer object if you want something other than 800x600
-RENDERER = ObjectRenderer(camera_distance=-35)
+# RENDERER will be created lazily when needed to avoid OpenGL initialization issues on import
+RENDERER = None
 
-def generate_rendition(object_cache:dict, output_dir:os.PathLike, dataframe_row:pl.Series, renderer:ObjectRenderer=RENDERER):
+def generate_rendition(object_cache:dict, output_dir:os.PathLike, dataframe_row:pl.Series, renderer:ObjectRenderer=None):
+    # Create renderer if not provided
+    if renderer is None:
+        global RENDERER
+        if RENDERER is None:
+            RENDERER = ObjectRenderer(camera_distance=-35)
+        renderer = RENDERER
+    
     primary_key = dataframe_row[PRIMARY_KEY]
 
     #arrange the eulers and generate the rotation object for consumption
