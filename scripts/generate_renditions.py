@@ -11,9 +11,9 @@ from functools import partial
 
 NUM_CORES = os.cpu_count() - 1
 
-OBJECT_DIRECTORY = os.path.normpath(r"")
-INPUT_CSV = os.path.normpath(r"")
-OUTPUT_DIRECTORY = os.path.normpath(r"")
+OBJECT_DIRECTORY = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/null_datasets_2025-09-05/PrefViews 3D objects")
+INPUT_CSV = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/null_datasets_2025-09-05/test/rotation_data.csv")
+OUTPUT_DIRECTORY = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/null_datasets_2025-09-05/test/renditions")
 
 #change this order to whatever order your program uses
 EULER_ORDER = "YZX"
@@ -42,11 +42,19 @@ def generate_rendition(object_cache:dict, output_dir:os.PathLike, dataframe_row:
 
     #generate rendition and save out
     rendition = renderer.generate_rendition(toy, rotation)
-    output_path = os.path.join(output_dir, f"rendition_{primary_key}.png")
+    output_path = os.path.join(output_dir, f"rendition_{primary_key}.jpg")
     rendition.save(output_path)
     return primary_key
 
-def main(input_csv:os.PathLike, output_directory:os.PathLike, object_directory:os.PathLike):
+def generate_renditions(input_csv:os.PathLike=None, output_directory:os.PathLike=None, object_directory:os.PathLike=None):
+    # Use default values if not provided
+    if input_csv is None:
+        input_csv = INPUT_CSV
+    if output_directory is None:
+        output_directory = OUTPUT_DIRECTORY
+    if object_directory is None:
+        object_directory = OBJECT_DIRECTORY
+    
     #read the csv
     dataframe = pl.read_csv(input_csv, ignore_errors=True)
     #filter out all rows that do not contain orientations
@@ -74,8 +82,9 @@ def main(input_csv:os.PathLike, output_directory:os.PathLike, object_directory:o
             desc="Generating Renditions"
         ))
 
-if __name__ == "__main__":
-    parser = ArgumentParser(prog="generate renditions",
+def cli_main():
+    """Console script entry point"""
+    parser = ArgumentParser(prog="generate-renditions",
                             description="reads an input csv containing euler angles and object names and generates"
                             "renditions of those objects by their rotations")
     parser.add_argument(
@@ -89,8 +98,11 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    main(
-        input_csv=args.input_csv or INPUT_CSV,
-        output_directory=args.output_directory or OUTPUT_DIRECTORY,
-        object_directory=args.object_directory or OBJECT_DIRECTORY
+    generate_renditions(
+        input_csv=args.input_csv,
+        output_directory=args.output_directory,
+        object_directory=args.object_directory
     )
+
+if __name__ == "__main__":
+    cli_main()
