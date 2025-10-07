@@ -11,9 +11,9 @@ from functools import partial
 
 NUM_CORES = os.cpu_count() - 1
 
-OBJECT_DIRECTORY = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/null_datasets_2025-09-05/PrefViews 3D objects")
-INPUT_CSV = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/null_datasets_2025-09-05/test/rotation_data.csv")
-OUTPUT_DIRECTORY = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/null_datasets_2025-09-05/test/renditions")
+OBJECT_DIRECTORY = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/Alfredo_data_5-21-25/PrefViews 3D objects")
+INPUT_CSV = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/Alfredo_data_5-21-25/pre_processed_random_rotations20k.csv")
+OUTPUT_DIRECTORY = os.path.normpath(r"/Users/tendejan/Desktop/Alfredo Higher Order Image Properties/Alfredo_data_5-21-25/renditions")
 
 #change this order to whatever order your program uses
 EULER_ORDER = "YZX"
@@ -50,7 +50,7 @@ def generate_rendition(object_cache:dict, output_dir:os.PathLike, dataframe_row:
 
     #generate rendition and save out
     rendition = renderer.generate_rendition(toy, rotation)
-    output_path = os.path.join(output_dir, f"rendition_{primary_key}.jpg")
+    output_path = os.path.join(output_dir, f"{primary_key}.jpg")
     rendition.save(output_path)
     return primary_key
 
