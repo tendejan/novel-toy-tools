@@ -8,6 +8,7 @@ from multiprocessing import Pool
 import os
 from tqdm import tqdm
 from functools import partial
+import numpy as np
 
 NUM_CORES = os.cpu_count() - 1
 
@@ -54,6 +55,58 @@ def generate_rendition(object_cache:dict, output_dir:os.PathLike, dataframe_row:
     rendition.save(output_path)
     return primary_key
 
+def generate_rendition_rot_mat(object_cache:dict, output_dir:os.PathLike, dataframe_row:pl.Series, renderer:ObjectRenderer=None):
+    """same as the generate_rendition function but using the rotation matrix explicitly"""
+    # Create renderer if not provided
+    if renderer is None:
+        global RENDERER
+        if RENDERER is None:
+            RENDERER = ObjectRenderer(camera_distance=-35)
+        renderer = RENDERER
+    
+    primary_key = dataframe_row[PRIMARY_KEY]
+
+    #arrange the eulers and generate the rotation object for consumption
+    x, y, z = dataframe_row[EULER_X], dataframe_row[EULER_Y], dataframe_row[EULER_Z]
+    #convert them to radians for the rotation matrix
+    x = np.deg2rad(x)
+    y = np.deg2rad(y)
+    z = np.deg2rad(z)
+
+    #compute each rotation component
+    Rx = np.array([
+        [1, 0 ,0],
+        [0, np.cos(x), -np.sin(x)],
+        [0, np.sin(x), np.cos(x)]
+    ])
+
+    Ry = np.array([
+        [np.cos(y), 0, np.sin(y)],
+        [0, 1, 0],
+        [-np.sin(y), 0, np.cos(y)]
+    ])
+
+    Rz = np.array([
+        [np.cos(z), -np.sin(z), 0],
+        [np.sin(z), np.cos(z), 0],
+        [0, 0, 1]
+    ])
+
+    # compute the rotation matrix
+    RM = Ry @ Rz @ Rx
+
+    rotation = Rotation.from_matrix(RM)
+
+    #get the toy object
+    object_name = dataframe_row[OBJECT_NAME]
+    toy = object_cache[object_name]
+
+    #generate rendition and save out
+    rendition = renderer.generate_rendition(toy, rotation)
+    output_path = os.path.join(output_dir, f"{primary_key}.jpg")
+    rendition.save(output_path)
+    return primary_key
+
 def generate_renditions(input_csv:os.PathLike=None, output_directory:os.PathLike=None, object_directory:os.PathLike=None):
     # Use default values if not provided
     if input_csv is None:
@@ -81,6 +134,43 @@ def generate_renditions(input_csv:os.PathLike=None, output_directory:os.PathLike
     os.makedirs(output_directory, exist_ok=True)
 
     partial_funct = partial(generate_rendition, toy_cache, output_directory)
+    #generate the rotations in parallel
+    print(f"Saving renditions to {output_directory}")
+    with Pool(NUM_CORES) as pool:
+        results = list(tqdm(
+            pool.imap_unordered(partial_funct, dataframe.iter_rows(named=True)),
+            total=dataframe.height,
+            desc="Generating Renditions"
+        ))
+
+def generate_renditions_rot_mat(input_csv:os.PathLike=None, output_directory:os.PathLike=None, object_directory:os.PathLike=None):
+    """same as the generate_renditions function but using the rotation matrix explicitly"""
+    # Use default values if not provided
+    if input_csv is None:
+        input_csv = INPUT_CSV
+    if output_directory is None:
+        output_directory = OUTPUT_DIRECTORY
+    if object_directory is None:
+        object_directory = OBJECT_DIRECTORY
+    
+    #read the csv
+    dataframe = pl.read_csv(input_csv, ignore_errors=True)
+    #filter out all rows that do not contain orientations
+    dataframe = dataframe.filter(
+        pl.col(EULER_X).is_not_null(),
+        pl.col(EULER_Y).is_not_null(),
+        pl.col(EULER_Z).is_not_null(),
+    )
+    #find and cache all unique objects in these data
+    wavefront_objects = dataframe.select(pl.col(OBJECT_NAME)).unique().to_series().to_list()
+    toy_cache = {}
+    for toy in wavefront_objects:
+        toy_cache[toy] = WavefrontNovelToy(toy, object_directory)
+
+    #create the out directory
+    os.makedirs(output_directory, exist_ok=True)
+
+    partial_funct = partial(generate_rendition_rot_mat, toy_cache, output_directory)
     #generate the rotations in parallel
     print(f"Saving renditions to {output_directory}")
     with Pool(NUM_CORES) as pool:
