@@ -107,6 +107,33 @@ def generate_rendition_rot_mat(object_cache:dict, output_dir:os.PathLike, datafr
     rendition.save(output_path)
     return primary_key
 
+def generate_rendition_after_global_rotation(object_cache:dict, output_dir:os.PathLike, global_rotation:Rotation, dataframe_row:pl.Series, renderer:ObjectRenderer=None):
+    """Apply a rotation before generating the renditions for the purpose of aligning mismatched spaces"""
+    # Create renderer if not provided
+    if renderer is None:
+        global RENDERER
+        if RENDERER is None:
+            RENDERER = ObjectRenderer(camera_distance=-35)
+        renderer = RENDERER
+    
+    primary_key = dataframe_row[PRIMARY_KEY]
+
+    #arrange the eulers and generate the rotation object for consumption
+    x, y, z = dataframe_row[EULER_X], dataframe_row[EULER_Y], dataframe_row[EULER_Z]
+    eulers = arrange_eulers(EULER_ORDER, x, y, z)
+    dataframe_rotation = Rotation.from_euler(EULER_ORDER, eulers, degrees=True)
+    compound_rotation = global_rotation.apply(dataframe_rotation)
+
+    #get the toy object
+    object_name = dataframe_row[OBJECT_NAME]
+    toy = object_cache[object_name]
+
+    #generate rendition and save out
+    rendition = renderer.generate_rendition(toy, compound_rotation)
+    output_path = os.path.join(output_dir, f"{primary_key}.jpg")
+    rendition.save(output_path)
+    return primary_key
+
 def generate_renditions(input_csv:os.PathLike=None, output_directory:os.PathLike=None, object_directory:os.PathLike=None):
     # Use default values if not provided
     if input_csv is None:
@@ -171,6 +198,42 @@ def generate_renditions_rot_mat(input_csv:os.PathLike=None, output_directory:os.
     os.makedirs(output_directory, exist_ok=True)
 
     partial_funct = partial(generate_rendition_rot_mat, toy_cache, output_directory)
+    #generate the rotations in parallel
+    print(f"Saving renditions to {output_directory}")
+    with Pool(NUM_CORES) as pool:
+        results = list(tqdm(
+            pool.imap_unordered(partial_funct, dataframe.iter_rows(named=True)),
+            total=dataframe.height,
+            desc="Generating Renditions"
+        ))
+
+def generate_renditions_global_rotation(global_rotation:Rotation, input_csv:os.PathLike=None, output_directory:os.PathLike=None, object_directory:os.PathLike=None):
+    # Use default values if not provided
+    if input_csv is None:
+        input_csv = INPUT_CSV
+    if output_directory is None:
+        output_directory = OUTPUT_DIRECTORY
+    if object_directory is None:
+        object_directory = OBJECT_DIRECTORY
+    
+    #read the csv
+    dataframe = pl.read_csv(input_csv, ignore_errors=True)
+    #filter out all rows that do not contain orientations
+    dataframe = dataframe.filter(
+        pl.col(EULER_X).is_not_null(),
+        pl.col(EULER_Y).is_not_null(),
+        pl.col(EULER_Z).is_not_null(),
+    )
+    #find and cache all unique objects in these data
+    wavefront_objects = dataframe.select(pl.col(OBJECT_NAME)).unique().to_series().to_list()
+    toy_cache = {}
+    for toy in wavefront_objects:
+        toy_cache[toy] = WavefrontNovelToy(toy, object_directory)
+
+    #create the out directory
+    os.makedirs(output_directory, exist_ok=True)
+
+    partial_funct = partial(generate_rendition_after_global_rotation, toy_cache, output_directory, global_rotation)
     #generate the rotations in parallel
     print(f"Saving renditions to {output_directory}")
     with Pool(NUM_CORES) as pool:
