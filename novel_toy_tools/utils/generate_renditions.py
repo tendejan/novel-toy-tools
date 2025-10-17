@@ -122,7 +122,7 @@ def generate_rendition_after_global_rotation(object_cache:dict, output_dir:os.Pa
     x, y, z = dataframe_row[EULER_X], dataframe_row[EULER_Y], dataframe_row[EULER_Z]
     eulers = arrange_eulers(EULER_ORDER, x, y, z)
     dataframe_rotation = Rotation.from_euler(EULER_ORDER, eulers, degrees=True)
-    compound_rotation = global_rotation.apply(dataframe_rotation)
+    compound_rotation = global_rotation * dataframe_rotation
 
     #get the toy object
     object_name = dataframe_row[OBJECT_NAME]
